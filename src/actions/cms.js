@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as types from './types';
 import * as _ from 'lodash';
+const api_uri = "http://localhost:4000";
 const cors = {
   withCredentials: true,
   credentials: 'include',
@@ -10,7 +11,7 @@ const cors = {
 }
 
 export const updateInfo = (info, id = null) => async (dispatch) => {
-  const res = await axios.patch('http://localhost:4000/api/cms/personal-info',info, cors);
+  const res = await axios.patch(api_uri+'/api/cms/personal-info',info, cors);
   dispatch({type: types.FETCH_INFO, payload: res.data}); // because we want to update the view
 }
 export const updateAboutMe = (about_me, id = null) => async (dispatch) => {
@@ -18,34 +19,34 @@ export const updateAboutMe = (about_me, id = null) => async (dispatch) => {
   dispatch({type: types.FETCH_ABOUT_ME, payload: res.data}); // because we want to update the view
 }
 export const updateResumeIntro = (intro, id = null) => async (dispatch) => {
-  const res = await axios.patch('http://localhost:4000/api/cms/resume-intro',intro);
+  const res = await axios.patch(api_uri+'/api/cms/resume-intro',intro);
   dispatch({type: types.FETCH_RESUME, payload: res.data}); // because we want to update the view
 }
 
 
 
 export const addEducation = (education, id = null) => async (dispatch) => {
-  const res = await axios.post('http://localhost:4000/api/cms/add-education', education);
+  const res = await axios.post(api_uri+'/api/cms/add-education', education);
   dispatch({type: types.FETCH_RESUME, payload: res.data}); // because we want to update the view
 }
 
 export const addEmployment = (employment, id = null) => async (dispatch) => {
-  const res = await axios.post('http://localhost:4000/api/cms/add-employment', employment);
+  const res = await axios.post(api_uri+'/api/cms/add-employment', employment);
   dispatch({type: types.FETCH_RESUME, payload: res.data}); // because we want to update the view
 }
 export const addSkill = (skill) => async (dispatch) => {
-  const res = await axios.post('http://localhost:4000/api/cms/add-skill', skill);
+  const res = await axios.post(api_uri+'/api/cms/add-skill', skill);
   dispatch({type: types.FETCH_RESUME, payload: res.data}); // because we want to update the view
 }
 
 export const addProject = (project, id = null) => async (dispatch) => {
-  const res = await axios.post('http://localhost:4000/api/cms/add-project', project, {
+  const res = await axios.post(api_uri+'/api/cms/add-project', project, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
   });
   if(res.data){
-    const res = await axios.get('http://localhost:4000/api/public/projects');
+    const res = await axios.get(api_uri+'/api/public/projects');
     dispatch({type: types.FETCH_PROJECTS, payload: res.data}); // because we want to update the view
   } else {
     dispatch({type: types.FETCH_PROJECTS, payload: null});
@@ -60,13 +61,13 @@ export const updateProject = (project = {}, id = null) => async (dispatch) => {
     })
     project = {...project, stack_items: stack_items}
   }
-  const res = await axios.patch('http://localhost:4000/api/cms/edit-project/'+id, project, {
+  const res = await axios.patch(api_uri+'/api/cms/edit-project/'+id, project, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
   });
   if(res.data){
-    const res = await axios.get('http://localhost:4000/api/public/projects');
+    const res = await axios.get(api_uri+'/api/public/projects');
     dispatch({type: types.FETCH_PROJECTS, payload: res.data}); // because we want to update the view
   } else {
     dispatch({type: types.FETCH_PROJECTS, payload: null});
@@ -74,7 +75,7 @@ export const updateProject = (project = {}, id = null) => async (dispatch) => {
 }
 
 export const loginUser = (credentials) => async (dispatch) => {
-  const res = await axios.post("http://localhost:4000/api/cms/login", credentials, {
+  const res = await axios.post(api_uri+'/api/cms/login', credentials, {
     withCredentials: true,
     credentials: 'include',
   });
@@ -87,6 +88,6 @@ export const loginUser = (credentials) => async (dispatch) => {
 
 }
 export const logoutUser = () => async (dispatch) => {
-  const res = await axios.get("http://localhost:4000/api/cms/logout", cors);
+  const res = await axios.get(api_uri+'/api/cms/logout', cors);
   dispatch({type: types.AUTHENTICATION, payload: res.data.user})
 }
